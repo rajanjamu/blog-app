@@ -4,7 +4,8 @@ const bodyParser    = require('body-parser'),
       app           = express();
 
 // App Config
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({'extended':'true'}));
+app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
@@ -15,13 +16,15 @@ mongoose.connect('mongodb://localhost/blog_app', {
 });
 
 // Declare the DB Schema
-const postSchema = new mongoose.Schema({
+var postSchema = new mongoose.Schema({
     title: String,
     image: String,
     body: String,
     created: { type: Date, default: Date.now }
 });
-const Post = mongoose.model('Post', postSchema);
+var ObjectId = mongoose.Types.ObjectId;
+var Post = mongoose.model('Post', postSchema);
+module.exports = Post;
 
 // Creating a sample post in DB
 // Post.create({
@@ -52,21 +55,17 @@ app.get('/posts/new', (req, res) => {
     res.render('new');
 });
 
-// 3. SHOW
-app.get('/posts/:id', (req, res) => {
-    console.log('SHOW', req.params.id);
-    Post.findById(req.params.id, (err, foundPost) => {
-        if (err) console.log('Error', err);
-        else res.render('show', { post: foundPost });
-    });
-});
-
 // 4. CREATE
 app.post('/posts', (req, res) => {
     console.log(req.body);
     Post.create(req.body, (err, createdPost) => {
         if (err) console.log(err);
-        else res.redirect(`/posts/${createdPost.id}`);
+        else {
+            res.json(createdPost);
+            // res.redirect(`/posts/${createdPost._id}`);
+            // res.end();
+        }
+        // else console.log(createdPost._id);
     })
 });
 
@@ -89,13 +88,27 @@ app.put('/posts/:id', (req, res) => {
     console.log(updatePost);
     Post.findByIdAndUpdate(req.params.id, updatePost, (err, updatedPost) => {
         if (err) console.log(err);
-        else res.redirect(`/posts/${updatedPost.id}`);
+        else res.redirect(`/posts/${updatedPost._id}`);
     });
 });
 
 // 7. DELETE
 app.delete('/posts/:id', (req, res) => {
     res.send('DELETE Post');
+});
+
+// 3. SHOW
+app.get('/posts/:id', (req, res) => {
+    console.log('SHOW', req.params.id);
+    var id = new ObjectId(req.params.id);
+
+    console.log('new id', id);
+
+    Post.findById(id, (err, foundPost) => {
+        if (err) console.log('Error', err);
+        else res.render('show', { post: foundPost });
+    });
+    // console.log('showPost', );req.app.get('id')
 });
 
 app.listen(3000, () => console.log("Blogging App is running at port 3000!"));
