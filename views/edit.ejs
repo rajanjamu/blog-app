@@ -1,0 +1,10 @@
+<h1>EDIT Page</h1>
+
+<form action="/posts/<%= post.id %>" method="PUT">
+    <input type="text" name="title" placeholder="Title" value=" <%= post.title %> ">
+    <input type="text" name="image" placeholder="Image URL" value=" <%= post.image %> ">
+    <input type="text" name="body" placeholder="Body" value=" <%= post.body %> ">
+    <button type="submit">Update Post</button>
+</form>
+
+<div><a href="/posts">Back</a></div>
