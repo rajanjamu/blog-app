@@ -1,16 +1,19 @@
-const bodyParser    = require('body-parser'),
-      mongoose      = require('mongoose'),
-      express       = require('express'),
-      app           = express();
+const methodOverride    = require('method-override'),
+      bodyParser        = require('body-parser'),
+      mongoose          = require('mongoose'),
+      express           = require('express'),
+      app               = express();
 
 // App Config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 // Connect to the Mongo Database
 mongoose.connect('mongodb://localhost/blog_app', {
    useNewUrlParser: true,
+   useFindAndModify: false,
    useUnifiedTopology: true
 });
 
@@ -54,7 +57,6 @@ app.get('/posts/new', (req, res) => {
 
 // 3. SHOW
 app.get('/posts/:id', (req, res) => {
-    console.log('SHOW', req.params.id);
     Post.findById(req.params.id, (err, foundPost) => {
         if (err) console.log('Error', err);
         else res.render('show', { post: foundPost });
@@ -63,10 +65,9 @@ app.get('/posts/:id', (req, res) => {
 
 // 4. CREATE
 app.post('/posts', (req, res) => {
-    console.log(req.body);
-    Post.create(req.body, (err, createdPost) => {
+    Post.create(req.body.post, (err, createdPost) => {
         if (err) console.log(err);
-        else res.redirect(`/posts/${createdPost.id}`);
+        else res.redirect(`/posts/${createdPost._id}`);
     })
 });
 
@@ -80,22 +81,17 @@ app.get('/posts/:id/edit', (req, res) => {
 
 // 6. UPDATE
 app.put('/posts/:id', (req, res) => {
-    console.log("Hello");
-    let updatePost = {
-        title: req.body.title,
-        image: req.body.image,
-        body: req.body.body
-    }
-    console.log(updatePost);
-    Post.findByIdAndUpdate(req.params.id, updatePost, (err, updatedPost) => {
+    Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedPost) => {
         if (err) console.log(err);
-        else res.redirect(`/posts/${updatedPost.id}`);
+        else res.redirect(`/posts/${req.params.id}`);
     });
 });
 
 // 7. DELETE
 app.delete('/posts/:id', (req, res) => {
-    res.send('DELETE Post');
+    Post.findByIdAndRemove(req.params.id, (err) => {
+        res.redirect('/posts');
+    });
 });
 
 app.listen(3000, () => console.log("Blogging App is running at port 3000!"));
