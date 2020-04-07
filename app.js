@@ -78,4 +78,9 @@ app.delete('/posts/:id', (req, res) => {
     });
 });
 
-app.listen(3000, () => console.log("Blogging App is running at port 3000!"));
+// Rest of the routes
+app.get('*', (req, res) => {
+    res.redirect('/');
+});
+
+app.listen(process.env.PORT || 3000, () => console.log("Blogging App is running at port 3000!"));
