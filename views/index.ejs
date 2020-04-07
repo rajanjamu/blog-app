@@ -1,16 +1,36 @@
-<h1>INDEX Page</h1>
+<%- include('partials/header') %>
 
-<div><a href="/posts/new">New Post</a></div>
+<div class="ui main text container segment">
 
 <% posts.forEach(post => { %>
-    <h2><%= post.title %></h2>
-    <p>Created: <%= post.created.toDateString() %></p>
-    <img src="<%= post.image %>" alt="">
-    <p><%= post.body %></p>
-    <a href="/posts/<%= post._id %>">More</a>
-    <a href="/posts/<%= post._id %>/edit">Edit</a>
-
-    <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
+  <div class="ui items">
+    <div class="item">
+      <div class="image">
+        <img src="<%= post.image %>">
+      </div>
+      <div class="content">
+        <a href="/posts/<%= post._id %>" class="header"><%= post.title %></a>
+        <div class="meta">
+          <span><%= post.created.toDateString() %></span>
+        </div>
+        <div class="description">
+          <p>
+            <%= post.body.split(' ').splice(0, 25).join(' ') %>
+             ...
+            <a href="/posts/<%= post._id %>">more</a>
+          </p>
+        </div>
+        <div class="extra"></div>
+      </div>
+    </div>
+  </div>
 <% }) %> 
+
+</div>
+
+    
+
+
+
+
+<%- include('partials/footer') %> 

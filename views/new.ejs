@@ -1,10 +1,25 @@
-<h1>NEW Page</h1>
+<%- include('partials/header') %> 
 
-<form action="/posts" method="POST">
-    <input type="text" name=post[title] placeholder="Title">
-    <input type="text" name=post[image] placeholder="Image URL">
-    <input type="text" name=post[body] placeholder="Body">
-    <button type="submit">Create Post</button>
-</form>
+<div class="ui main text container segment">
 
-<div><a href="/posts">Back</a></div>
+    <div class="ui huge header">New Post</div>
+
+    <form class="ui form" action="/posts" method="POST">
+        <div class="field">
+            <label>Title</label>
+            <input type="text" name=post[title] placeholder="Title">
+        </div>
+        <div class="field">
+            <label>Image URL</label>
+            <input type="text" name=post[image] placeholder="Image URL">
+        </div>
+        <div class="field">
+            <label>Content</label>
+            <textarea name="post[body]" id="" cols="30" rows="10" placeholder="Tell us what you are thinking..."></textarea>
+        </div>
+        <button class="ui button">Create Post</button>
+    </form>
+
+</div>
+
+<%- include('partials/footer') %> 
