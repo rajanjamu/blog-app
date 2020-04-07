@@ -2,7 +2,7 @@
 
 <div class="ui main text container segment">
 
-<% posts.forEach(post => { %>
+<% posts.forEach((post, i) => { %>
   <div class="ui items">
     <div class="item">
       <div class="image">
@@ -15,15 +15,21 @@
         </div>
         <div class="description">
           <p>
-            <%= post.body.split(' ').splice(0, 25).join(' ') %>
-             ...
-            <a href="/posts/<%= post._id %>">more</a>
+            <% if (post.body.split(' ').length > 25) { %> 
+              <%= post.body.split(' ').splice(0, 25).join(' ') %>
+              ... <a href="/posts/<%= post._id %>">more</a>
+            <% } else { %>
+              <%= post.body %> 
+            <% } %>  
           </p>
         </div>
         <div class="extra"></div>
       </div>
     </div>
   </div>
+  <% if (i < posts.length - 1) { %> 
+    <div class="ui divider"></div>
+  <% } %> 
 <% }) %> 
 
 </div>
