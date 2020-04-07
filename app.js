@@ -14,7 +14,7 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 // Connect to the Mongo Database
-mongoose.connect('mongodb://localhost/blog_app', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/blog_app', {
    useNewUrlParser: true,
    useFindAndModify: false,
    useUnifiedTopology: true
