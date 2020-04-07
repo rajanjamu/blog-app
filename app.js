@@ -2,10 +2,12 @@ const methodOverride    = require('method-override'),
       bodyParser        = require('body-parser'),
       mongoose          = require('mongoose'),
       express           = require('express'),
-      app               = express();
-      Post              = require('./models/post.js')
+      app               = express(),
+      Post              = require('./models/post.js'),
+      seedDB            = require('./seeds');
 
 // App Config
+//seedDB();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
@@ -18,22 +20,12 @@ mongoose.connect('mongodb://localhost/blog_app', {
    useUnifiedTopology: true
 });
 
-// Creating a sample post in DB
-// Post.create({
-//     title: "My First Blog",
-//     image: "https://cdn.dribbble.com/users/269922/screenshots/1008644/files.jpg",
-//     body: "This is my first blog. I am excited to be building this app as I have always been wanting to do it and never had courage, thinking about the mountains of workload that it will result into. Corona perios is forutnately or unfortunately a great time!"
-// }, (err, post) => {
-//     if (err) console.log(err);
-//     else console.log(post);
-// });
-
+// ------------ RESTFUL ROUTES ------------
 // ROOT
 app.get('/', (req, res) => {
     res.redirect('/posts');
 });
 
-// ------------ RESTFUL ROUTES ------------
 // 1. INDEX
 app.get('/posts', (req, res) => {
     Post.find({}, (err, allPosts) => {
