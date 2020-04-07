@@ -3,6 +3,7 @@ const methodOverride    = require('method-override'),
       mongoose          = require('mongoose'),
       express           = require('express'),
       app               = express();
+      Post              = require('./models/post.js')
 
 // App Config
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,15 +17,6 @@ mongoose.connect('mongodb://localhost/blog_app', {
    useFindAndModify: false,
    useUnifiedTopology: true
 });
-
-// Declare the DB Schema
-const postSchema = new mongoose.Schema({
-    title: String,
-    image: String,
-    body: String,
-    created: { type: Date, default: Date.now }
-});
-const Post = mongoose.model('Post', postSchema);
 
 // Creating a sample post in DB
 // Post.create({
