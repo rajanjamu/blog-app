@@ -1,10 +1,14 @@
-const methodOverride    = require('method-override'),
-      bodyParser        = require('body-parser'),
-      mongoose          = require('mongoose'),
-      express           = require('express'),
-      app               = express(),
-      Post              = require('./models/post.js'),
-      seedDB            = require('./seeds');
+const methodOverride        = require('method-override'),
+      bodyParser            = require('body-parser'),
+      mongoose              = require('mongoose'),
+      express               = require('express'),
+      app                   = express(),
+      passport              = require('passport'),
+      LocalStrategy         = require('passport-local'),
+      passportLocalMongoose = require('passport-local-mongoose'),
+      Post                  = require('./models/post'),
+      User                  = require('./models/user'),
+      seedDB                = require('./seeds');
 
 // App Config
 //seedDB();
@@ -12,6 +16,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
+app.use(require('express-session')({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Connect to the Mongo Database
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/blog_app', {
@@ -35,7 +49,7 @@ app.get('/posts', (req, res) => {
 });
 
 // 2. NEW
-app.get('/posts/new', (req, res) => {
+app.get('/posts/new', isLoggedIn, (req, res) => {
     res.render('new');
 });
 
@@ -56,7 +70,7 @@ app.post('/posts', (req, res) => {
 });
 
 // 5. EDIT
-app.get('/posts/:id/edit', (req, res) => {
+app.get('/posts/:id/edit', isLoggedIn, (req, res) => {
     Post.findById(req.params.id, (err, editPost) => {
         if (err) console.log(err);
         else res.render('edit', { post: editPost });
@@ -77,6 +91,46 @@ app.delete('/posts/:id', (req, res) => {
         res.redirect('/posts');
     });
 });
+
+// AUTH ROUTES
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/login');
+});
+
+app.post('/register', (req, res) => {
+    User.register(new User({username: req.body.username}), req.body.password, (err, user) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('register');
+        }
+        passport.authenticate('local')(req, res, () => {
+            res.redirect('/');
+        });
+    });
+});
+
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+}), (req, res) => {
+    passport.authenticate('local')(req, res, () => {
+        res.redirect('/');
+    });
+});
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/login');
+}
 
 // Rest of the routes
 app.get('*', (req, res) => {

@@ -6,7 +6,7 @@
 
     <form class="ui form" action="/posts" method="POST">
         <div class="field">
-            <label>Title</label>
+            <label>Title *</label>
             <input type="text" name=post[title] placeholder="Title" required>
         </div>
         <div class="field">
@@ -14,7 +14,7 @@
             <input type="text" name=post[image] placeholder="Image URL">
         </div>
         <div class="field">
-            <label>Content</label>
+            <label>Content *</label>
             <textarea name="post[body]" id="" cols="30" rows="10" placeholder="Tell us what you are thinking..." required></textarea>
         </div>
         <button class="ui button">Create Post</button>
