@@ -3,18 +3,19 @@
 <div class="ui main text container segment">
 
     <div class="ui huge header"><%= post.title %></div>
-    <div class="ui icon compact menu">
-        <a href="/posts" class="item">
-          <i class="home icon"></i>
-          <!-- <i class="chevron left icon"></i> -->
-        </a>
+    <% if (currentUser) { %> 
+      <div class="ui icon compact menu">
+          <!-- <a href="/posts" class="item">
+            <i class="home icon"></i>
+          </a> -->
         <a href="/posts/<%= post.id %>/edit" class="item">
           <i class="edit icon"></i>
         </a>
         <form class="ui" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
             <a href="javascript:$('form').submit()" class="item"><i class="trash icon"></i></a>
         </form>
-    </div>
+      </div>
+    <% } %>
 
     <div class="ui hidden divider"></div>
     <p><%= post.created.toDateString() %></p>

@@ -34,6 +34,11 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/blog_app', {
    useUnifiedTopology: true
 });
 
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
 // ------------ RESTFUL ROUTES ------------
 // ROOT
 app.get('/', (req, res) => {
@@ -128,7 +133,9 @@ app.post('/login', passport.authenticate('local', {
 });
 
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
+    if (req.isAuthenticated()) {
+        return next();
+    }
     res.redirect('/login');
 }
 
