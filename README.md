@@ -17,5 +17,6 @@ PACKAGE.JSON
   },
 
 
-ADD FAVICON
+RUNNING SCRIPT
 =================
+npm run <>
