@@ -10,6 +10,9 @@ const methodOverride        = require('method-override'),
       User                  = require('./models/user'),
       seedDB                = require('./seeds');
 
+// Variables
+app.locals.errMsg = app.locals.errMsg || null;
+
 // App Config
 //seedDB();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,6 +37,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/blog_app', {
    useUnifiedTopology: true
 });
 
+// Getting current user in all templates
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
@@ -103,7 +107,8 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', { login_errors: req.session.messages || null });
+    req.session.messages = [];
 });
 
 app.get('/logout', (req, res) => {
@@ -115,7 +120,7 @@ app.post('/register', (req, res) => {
     User.register(new User({username: req.body.username}), req.body.password, (err, user) => {
         if (err) {
             console.log(err);
-            return res.redirect('register');
+            return res.render('register', { errMsg: err.message });
         }
         passport.authenticate('local')(req, res, () => {
             res.redirect('/');
@@ -125,7 +130,8 @@ app.post('/register', (req, res) => {
 
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/login'
+    failureRedirect: '/login',
+    failureMessage: "Invalid username or password"
 }), (req, res) => {
     passport.authenticate('local')(req, res, () => {
         res.redirect('/');

@@ -5,6 +5,13 @@
         <div class="ui eight wide column segment center aligned">
             <div class="ui huge header">Login</div>
 
+            <% if (login_errors) { %> 
+                <div class="ui negative message">
+                    <i class="close icon"></i>
+                    <p> <%= login_errors %>  </p>
+                </div>
+            <% } %> 
+
             <form action="/login" method="POST" class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">

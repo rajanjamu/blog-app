@@ -25,7 +25,7 @@
         </div>
         <div class="right menu">
             <% if (!currentUser) { %> 
-                <a class="item" href="/login">
+                <a class="item" href="/login" data-tooltip="Login" data-position="bottom right" data-inverted="">
                     <i class="sign-in icon"></i>
                 </a>
             <% } else { %>
@@ -33,10 +33,10 @@
                     <i class="user icon"></i>
                     Hi, <%= currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1) %>
                 </a>
-                <a class="item" href="/posts/new">
+                <a class="item" href="/posts/new" data-tooltip="Add Post" data-position="bottom right" data-inverted="">
                     <i class="plus icon"></i>
                 </a>
-                <a class="item" href="/logout">
+                <a class="item" href="/logout" data-tooltip="Logout" data-position="bottom right" data-inverted="">
                     <i class="sign-out icon"></i>
                 </a>
             <% } %> 
