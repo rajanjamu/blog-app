@@ -18,7 +18,7 @@
     <% } %>
 
     <div class="ui hidden divider"></div>
-    <p><%= post.created.toDateString() %></p>
+    <p><i class="calendar icon"></i><%= post.created.toDateString() %> &nbsp; <i class="user circle icon"></i><em><%= post.author.username %></em></p>
     <div class="ui hidden divider"></div>
 
     <div class="ui top attached">

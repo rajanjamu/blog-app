@@ -11,7 +11,7 @@
       <div class="content">
         <a href="/posts/<%= post._id %>" class="header"><%= post.title %></a>
         <div class="meta">
-          <span><%= post.created.toDateString() %></span>
+          <span><i class="calendar icon"></i><%= post.created.toDateString() %> &nbsp; <i class="user circle icon"></i><em></em><%= post.author.username %></em></span>
         </div>
         <div class="description">
           <p>

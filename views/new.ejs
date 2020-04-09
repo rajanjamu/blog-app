@@ -17,6 +17,8 @@
             <label>Content *</label>
             <textarea name="post[body]" id="" cols="30" rows="10" placeholder="Tell us what you are thinking..." required></textarea>
         </div>
+        <input type="hidden" name=post[author][_id] value="<%= currentUser._id %>">
+        <input type="hidden" name=post[author][username] value="<%= currentUser.username %>">
         <button class="ui button">Create Post</button>
     </form>
 
