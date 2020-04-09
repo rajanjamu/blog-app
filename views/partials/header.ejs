@@ -43,3 +43,18 @@
         </div>    
     </div>
 </div>
+
+<div class="ui container">
+    <% if (error && error.length > 0) { %>
+        <div class="ui orange message">
+            <p><%= error %></p>
+        </div>
+    <% } %>
+    <% if (success && success.length > 0) { %>  
+        <div class="ui olive message">
+            <p><%= success %></p>
+        </div>
+    <% } %> 
+</div>
+
+<div class="ui hidden divider"></div>

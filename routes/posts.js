@@ -27,7 +27,10 @@ router.get('/posts/:id', (req, res) => {
 router.post('/posts', (req, res) => {
     Post.create(req.body.post, (err, createdPost) => {
         if (err) console.log(err);
-        else res.redirect(`/posts/${createdPost._id}`);
+        else {
+            req.flash('success', 'Your post has been successfully created!');
+            res.redirect(`/posts/${createdPost._id}`);
+        }
     })
 });
 
@@ -43,21 +46,27 @@ router.get('/posts/:id/edit', isLoggedIn, (req, res) => {
 router.put('/posts/:id', (req, res) => {
     Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedPost) => {
         if (err) console.log(err);
-        else res.redirect(`/posts/${req.params.id}`);
+        else {
+            req.flash('success', 'Your post has been successfully updated!');
+            res.redirect(`/posts/${req.params.id}`);
+        }
     });
 });
 
 // 7. DELETE
 router.delete('/posts/:id', (req, res) => {
     Post.findByIdAndRemove(req.params.id, (err) => {
+        req.flash('success', 'Your post has been successfully deleted!');
         res.redirect('/posts');
     });
 });
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
+        req.flash('success', 'You have been successfully logged in!');
         return next();
     }
+    req.flash('error', 'You are not logged in. Please login!')
     res.redirect('/login');
 }
 

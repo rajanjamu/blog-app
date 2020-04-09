@@ -5,13 +5,6 @@
         <div class="ui eight wide column segment center aligned">
             <div class="ui huge header">Register</div>
 
-            <% if (errMsg) { %> 
-                <div class="ui negative message">
-                    <i class="close icon"></i>
-                    <p> <%= errMsg %>  </p>
-                </div>
-            <% } %> 
-
             <form action="/register" method="POST" class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">
